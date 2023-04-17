@@ -21,26 +21,26 @@ def Send():
     window.configure(bg='#f4fdfe')
     window.resizable(False,False)
 
-
     def select_file():
         global filename
-        filename=filedialog.askopenfile(initialdir=os.getcwd(),title='Select image File',
-                                        filetypes=(('file type','*.txt'),('all files','*.*')))
-
-
+        file = filedialog.askopenfile(initialdir=os.getcwd(), title='Select image File',
+                                      filetypes=(('file type', '*.txt'), ('all files', '*.*')))
+        if file:
+            filename = file.name
+            print(filename)
 
     def sender():
-        s=socket.socket()
-        host=socket.gethostname()
-        port=8085
-        s.bind((host,port))
+        s = socket.socket()
+        host = socket.gethostname()
+        port = 8085
+        s.bind((host, port))
         s.listen(1)
         print(host)
         print('waiting for any incoming connection.........')
-        conn,addr=s.accept()
-        file=open(filename,'rb')
-        file_data=file.read(1024)
-        conn.send(file_data)
+        conn, addr = s.accept()
+        with open(filename, 'rb') as file:
+            file_data = file.read(1024)
+            conn.send(file_data)
         print("Data has been transmitted successfully...")
 
     #icon
