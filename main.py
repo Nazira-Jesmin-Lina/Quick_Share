@@ -1,4 +1,4 @@
-from fileinput import filename
+
 from tkinter import *
 import socket
 import threading
@@ -23,6 +23,7 @@ def Send():
 
 
     def select_file():
+        global filename
         filename=filedialog.askopenfile(initialdir=os.getcwd(),title='Select image File',
                                         filetypes=(('file type','*.txt'),('all files','*.*')))
 
@@ -69,10 +70,46 @@ def Receive():
     main.configure(bg='#f4fdfe')
     main.resizable(False, False)
 
+    def receiver():
+        ID=SenderID.get()
+        filename1=incomming_file.get()
+
+
+        s=socket.socket()
+        port=8085
+        s.connect((ID,port))
+        file=open(filename1,'wb')
+        file_data=s.recv(1024)
+        file.write(file_data)
+        file.close()
+        print("file has been received successfully..")
+
+
     # icon
     image_icon1 = PhotoImage(file="image/rcv_shareit.png")
     main.iconphoto(False, image_icon1)
+    Hbackground = PhotoImage(file="image/sender_1_450x200.png")
+    Label(main, image=Hbackground).place(x=-2, y=0)
 
+    Logo = PhotoImage(file="image/id_150x150.png")
+    Label(main, image=Logo, bg='#f4fdfe').place(x=150, y=230)
+
+    Label(main, text="Received", font=('arial', 20), bg='#f4fdfe').place(x=160, y=280)
+
+    Label(main, text="Input Sender Id", font=('arial', 10, 'bold'), bg='#f4fdfe').place(x=20, y=340)
+    SenderID = Entry(main, width=25, fg="black", border=2, bg='white', font=('arial', 15))
+    SenderID.place(x=20, y=370)
+    SenderID.focus()
+
+    Label(main, text="Filename For Incomming File", font=('arial', 10, 'bold'), bg='#f4fdfe').place(x=20, y=420)
+    incomming_file = Entry(main, width=25, fg="black", border=2, bg='white', font=('arial', 15))
+    incomming_file.place(x=20, y=450)
+
+
+    imageicon = PhotoImage(file="image/arrow-removebg-preview_30x30.png")
+    rr = Button(main, text="Receive", compound=LEFT, image=imageicon, width=130, bg="#39c790", font='arial 14 bold',
+                command=receiver)
+    rr.place(x=20, y=500)
     main.mainloop()
 
 
