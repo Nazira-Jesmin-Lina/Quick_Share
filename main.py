@@ -96,7 +96,7 @@ def Receive():
     main.resizable(False, False)
 
     def receiver():
-        ID=SenderID.get()
+        ID=str(SenderID.get())
         filename1=incomming_file.get()
 
 
