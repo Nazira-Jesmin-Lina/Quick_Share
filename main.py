@@ -15,6 +15,10 @@ root.configure(bg="#f4fdfe")
 root.resizable(False,False)
 
 
+# def catch_minimize(event):
+#     root.wm_state()
+#     print("window minimzed")
+
 def Send():
     root.withdraw()
     window=Toplevel(root)
@@ -65,7 +69,7 @@ def Send():
     Label(window,text=f'ID: {host}',bg='#fff',fg='#000').place(x=160,y=260)
 
 
-    Button(window, text="+Select File",width=10,height=1,font='arial 14 bold',bg="#fff",fg="#000",command=select_file).place(x=160,y=150)
+    Button(window, text="+Select File",width=10,height=1,font='arial 14 bold',bg='#7FFFD4',fg="#000",command=select_file).place(x=160,y=150)
     Button(window, text="Send", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff",command=sender).place(x=300,y=150)
 
     Button(window, text="Back", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff", command=back_btn).place(x=100, y=100)
@@ -75,7 +79,8 @@ def Send():
         window.destroy()
         root.destroy()
 
-    # Callback
+
+
     window.protocol("WM_DELETE_WINDOW", on_closing)
 
 
@@ -140,8 +145,10 @@ def Receive():
         main.destroy()
         root.destroy()
 
-    # Callback
+
     main.protocol("WM_DELETE_WINDOW", on_closing)
+
+
     main.mainloop()
 
 
@@ -153,27 +160,30 @@ Label(root,text="File transfer",font=('Acumin Variable Concept',20,'bold'), bg="
 
 Frame(root,width=400,height=2,bg="#f3f5f6",bd=0).place(x=25,y=80)
 
-send_image=PhotoImage(file="image/send_shareit.png")
+send_image=PhotoImage(file="image/send_fin.png")
 send=Button(root,image=send_image,bg="#f4fdfe",bd=0,command=Send)
 send.place(x=50,y=100)
 
-rcv_image=PhotoImage(file="image/rcv_shareit.png")
+rcv_image=PhotoImage(file="image/rcv_fin.png")
 rcv=Button(root,image=rcv_image,bg="#f4fdfe",bd=0,command=Receive)
 rcv.place(x=300,y=100)
 
-Label(root,text="Send",font=('Acumin Variable Concept',17,'bold'), bg="#f4fdfe").place(x=50,y=200)
+Label(root,text="Send",font=('Acumin Variable Concept',17,'bold'), bg="#f4fdfe").place(x=60,y=200)
 Label(root,text="Receive",font=('Acumin Variable Concept',17,'bold'), bg="#f4fdfe").place(x=300,y=200)
 
-background=PhotoImage(file="image/bg.png")
-Label(root,image=background).place(x=-20,y=280)
+background=PhotoImage(file="image/background.png")
+Label(root,image=background).place(x=-2,y=280)
 
-# Function for callback
+
 def on_closing():
    print("User clicked close button")
    root.destroy()
 
 
-# Callback
+
 root.protocol("WM_DELETE_WINDOW", on_closing)
+
+
+# root.bind("<Unmap>", catch_minimize)
 
 root.mainloop()
