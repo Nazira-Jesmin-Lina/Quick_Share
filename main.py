@@ -7,6 +7,7 @@ from tkinter import messagebox
 import  os
 
 
+
 root=Tk()
 root.title("Quick Share!")
 root.geometry("450x560+500+200")
@@ -68,6 +69,16 @@ def Send():
     Button(window, text="Send", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff",command=sender).place(x=300,y=150)
 
     Button(window, text="Back", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff", command=back_btn).place(x=100, y=100)
+
+    def on_closing():
+        print("User clicked close button")
+        window.destroy()
+        root.destroy()
+
+    # Callback
+    window.protocol("WM_DELETE_WINDOW", on_closing)
+
+
     window.mainloop()
 
 def Receive():
@@ -123,6 +134,14 @@ def Receive():
     rr = Button(main, text="Receive", compound=LEFT, image=imageicon, width=130, bg="#39c790", font='arial 14 bold',
                 command=receiver)
     rr.place(x=20, y=500)
+
+    def on_closing():
+        print("User clicked close button")
+        main.destroy()
+        root.destroy()
+
+    # Callback
+    main.protocol("WM_DELETE_WINDOW", on_closing)
     main.mainloop()
 
 
@@ -147,5 +166,14 @@ Label(root,text="Receive",font=('Acumin Variable Concept',17,'bold'), bg="#f4fdf
 
 background=PhotoImage(file="image/bg.png")
 Label(root,image=background).place(x=-20,y=280)
+
+# Function for callback
+def on_closing():
+   print("User clicked close button")
+   root.destroy()
+
+
+# Callback
+root.protocol("WM_DELETE_WINDOW", on_closing)
 
 root.mainloop()
