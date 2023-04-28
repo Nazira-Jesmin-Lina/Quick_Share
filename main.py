@@ -15,6 +15,7 @@ root.resizable(False,False)
 
 
 def Send():
+    root.withdraw()
     window=Toplevel(root)
     window.title("Send")
     window.geometry('450x560+500+200')
@@ -43,6 +44,11 @@ def Send():
             conn.send(file_data)
         print("Data has been transmitted successfully...")
 
+
+
+    def back_btn():
+        root.deiconify()
+
     #icon
     image_icon1=PhotoImage(file="image/send_shareit.png")
     window.iconphoto(False,image_icon1)
@@ -61,9 +67,11 @@ def Send():
     Button(window, text="+Select File",width=10,height=1,font='arial 14 bold',bg="#fff",fg="#000",command=select_file).place(x=160,y=150)
     Button(window, text="Send", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff",command=sender).place(x=300,y=150)
 
+    Button(window, text="Back", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff", command=back_btn).place(x=100, y=100)
     window.mainloop()
 
 def Receive():
+    root.withdraw()
     main = Toplevel(root)
     main.title("Receive")
     main.geometry('450x560+500+200')
@@ -83,6 +91,9 @@ def Receive():
         file.write(file_data)
         file.close()
         print("file has been received successfully..")
+
+    def back_btn():
+        root.deiconify()
 
 
     # icon
@@ -104,6 +115,8 @@ def Receive():
     Label(main, text="Filename For Incomming File", font=('arial', 10, 'bold'), bg='#f4fdfe').place(x=20, y=420)
     incomming_file = Entry(main, width=25, fg="black", border=2, bg='white', font=('arial', 15))
     incomming_file.place(x=20, y=450)
+
+    Button(main, text="Back", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff", command=back_btn).place(x=100, y=100)
 
 
     imageicon = PhotoImage(file="image/arrow-removebg-preview_30x30.png")
