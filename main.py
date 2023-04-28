@@ -52,13 +52,14 @@ def Send():
 
 
     def back_btn():
+        window.withdraw()
         root.deiconify()
 
     #icon
-    image_icon1=PhotoImage(file="image/send_shareit.png")
+    image_icon1=PhotoImage(file="image/send_fin.png")
     window.iconphoto(False,image_icon1)
 
-    Sbackground = PhotoImage(file="image/sender_1_450x200.png")
+    Sbackground = PhotoImage(file="image/bg_send_450x560.png")
     Label(window, image=Sbackground).place(x=-2, y=0)
 
     Mbackground = PhotoImage(file="image/id_150x150.png")
@@ -109,13 +110,14 @@ def Receive():
         print("file has been received successfully..")
 
     def back_btn():
+        main.withdraw()
         root.deiconify()
 
 
     # icon
-    image_icon1 = PhotoImage(file="image/rcv_shareit.png")
+    image_icon1 = PhotoImage(file="image/rcv_fin.png")
     main.iconphoto(False, image_icon1)
-    Hbackground = PhotoImage(file="image/sender_1_450x200.png")
+    Hbackground = PhotoImage(file="image/bg_send_450x560.png")
     Label(main, image=Hbackground).place(x=-2, y=0)
 
     Logo = PhotoImage(file="image/id_150x150.png")
