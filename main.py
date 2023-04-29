@@ -35,18 +35,24 @@ def screen_share():
     Sbackground = PhotoImage(file="image/bg_send_450x560.png")
     Label(window, image=Sbackground).place(x=-2, y=0)
 
-    Mbackground = PhotoImage(file="image/id_150x150.png")
-    Label(window, image=Mbackground, bg='#f4fdfe').place(x=150, y=260)
+    Mbackground = PhotoImage(file="image/sss_ui.png")
+    Label(window, image=Mbackground, bg='#87CEEB').place(x=160, y=40)
 
     host = socket.gethostname()
     ip_address = socket.gethostbyname(host)
-    Label(window, text=f'IP: {ip_address}', bg='#fff', fg='#000').place(x=160, y=260)
+    Label(window, text=f'IP: {ip_address}', bg='#87CEEB', fg='#000').place(x=180, y=150)
 
-    Button(window, text="connect", width=10, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000").place(x=120, y=150)
-    Button(window, text="Share your Screen", width=15, height=1, font='arial 14 bold', bg="#000", fg="#fff").place(x=250, y=150)
+    Button(window, text="connect", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000").place(x=110, y=250)
 
-    Button(window, text="Back", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff",
-           command=back_btn).place(x=100, y=100)
+
+    SenderID = Entry(window, width=22,fg="black", border=4, bg='white', font=('arial', 15))
+    SenderID.place(x=110, y=320)
+    SenderID.focus()
+    SenderID.insert(0,"IP Address")
+    Button(window, text="Share your Screen", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000").place(x=110, y=380)
+
+    Button(window, text="Back", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
+           command=back_btn).place(x=110, y=450)
 
     def on_closing():
         print("User clicked close button")
@@ -79,22 +85,22 @@ def file_transfer():
         # Frame(root, width=400, height=2, bg="#f3f5f6", bd=0).place(x=25, y=80)
 
         global scrn_image
-        scrn_image = PhotoImage(file="image/rcv_fin.png")
+        scrn_image = PhotoImage(file="image/scrn_share.png")
         global scrn_share
-        scrn_share = Button(root, image=scrn_image, bg="#f4fdfe", bd=0)
+        scrn_share = Button(root, image=scrn_image, bg="#f4fdfe", bd=0, command=screen_share)
         scrn_share.place(x=50, y=100)
 
         global file_image
-        file_image = PhotoImage(file="image/send_fin.png")
+        file_image = PhotoImage(file="image/file_transfer.png")
         global file_trans
         file_trans = Button(root, image=file_image, bg="#f4fdfe", bd=0, command=file_transfer)
         file_trans.place(x=300, y=100)
         global label2
         label2 = Label(root, text="Screen Share", font=('Acumin Variable Concept', 17, 'bold'), bg="#f4fdfe")
-        label2.place(x=60, y=200)
+        label2.place(x=40, y=200)
         global label3
         label3 = Label(root, text="File Transfer", font=('Acumin Variable Concept', 17, 'bold'), bg="#f4fdfe")
-        label3.place(x=300, y=200)
+        label3.place(x=280, y=200)
 
     # def catch_minimize(event):
     #     root.wm_state()
@@ -117,6 +123,7 @@ def file_transfer():
                 filename = file.name
                 basename = os.path.basename(filename)
                 print("Exact file name:", basename)
+                Label(window, text=f' {basename}',font=('Acumin Variable Concept', 13, ), bg='#7FFFD4', fg="#000" ).place(x=114, y=255)
 
         def sender():
             s = socket.socket()
@@ -136,6 +143,10 @@ def file_transfer():
                         break
                     conn.send(file_data)
             print("Data has been transmitted successfully...")
+            send_btn.destroy()
+            Label(window, text=f'Data has been transmitted successfully...', font=('Acumin Variable Concept', 13,), bg='#7FFFD4', fg="#000").place(
+                x=110, y=300)
+
 
         def back_btn():
             window.withdraw()
@@ -149,19 +160,26 @@ def file_transfer():
         Label(window, image=Sbackground).place(x=-2, y=0)
 
         Mbackground = PhotoImage(file="image/id_150x150.png")
-        Label(window, image=Mbackground, bg='#f4fdfe').place(x=150, y=260)
+        Label(window, image=Mbackground, bg='#f4fdfe').place(x=150, y=15)
 
         host = socket.gethostname()
         ip_address = socket.gethostbyname(host)
-        Label(window, text=f'IP: {ip_address}', bg='#fff', fg='#000').place(x=160, y=260)
+        Label(window, text=f'IP: {ip_address}', bg='#7FFFD4', fg="#000",).place(x=180, y=150)
 
-        Button(window, text="+Select File", width=10, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
-               command=select_file).place(x=160, y=150)
-        Button(window, text="Send", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff",
-               command=sender).place(x=300, y=150)
+        Button(window, text="+Select File", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
+               command=select_file).place(x=110, y=200)
 
-        Button(window, text="Back", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff",
-               command=back_btn).place(x=100, y=100)
+        global send_btn
+        send_btn=Button(window, text="Send", width=20, height=1, font='arial 14 bold',bg='#7FFFD4', fg="#000",
+               command=sender)
+        send_btn.place(x=110, y=300)
+        sel_file = Entry(window, width=22, fg="black", border=4, bg='#7FFFD4', font=('arial', 15))
+        sel_file.place(x=110, y=250)
+        sel_file.focus()
+        sel_file.insert(0,"....")
+
+        Button(window, text="Back", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
+               command=back_btn).place(x=110, y=350)
 
         def on_closing():
             print("User clicked close button")
@@ -197,6 +215,7 @@ def file_transfer():
                     file.write(file_data)
             print("file has been received successfully..")
 
+
         def back_btn():
             main.withdraw()
             root.deiconify()
@@ -207,7 +226,7 @@ def file_transfer():
         Hbackground = PhotoImage(file="image/bg_send_450x560.png")
         Label(main, image=Hbackground).place(x=-2, y=0)
 
-        Label(main, text="Input Sender Id", font=('arial', 10, 'bold'), bg='#f4fdfe').place(x=20, y=340)
+        Label(main, text="Input Sender IP", font=('arial', 10, 'bold'), bg='#f4fdfe').place(x=20, y=340)
         SenderID = Entry(main, width=25, fg="black", border=2, bg='white', font=('arial', 15))
         SenderID.place(x=20, y=370)
         SenderID.focus()
@@ -252,8 +271,8 @@ def file_transfer():
     label33=Label(root, text="Receive", font=('Acumin Variable Concept', 17, 'bold'), bg="#f4fdfe")
     label33.place(x=300, y=200)
 
-    bck = Button(root, text="Back", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff",command=back_press)
-    bck.place(x=350, y=1)
+    bck = Button(root, text="Back", width=10, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",command=back_press)
+    bck.place(x=150, y=500)
     root.mainloop()
 
 
@@ -268,23 +287,23 @@ Frame(root,width=400,height=2,bg="#f3f5f6",bd=0).place(x=25,y=80)
 
 
 global scrn_image
-scrn_image=PhotoImage(file="image/rcv_fin.png")
+scrn_image=PhotoImage(file="image/scrn_share.png")
 global scrn_share
 scrn_share=Button(root,image=scrn_image,bg="#f4fdfe",bd=0,command=screen_share)
 scrn_share.place(x=50,y=100)
 
 
 global file_image
-file_image=PhotoImage(file="image/send_fin.png")
+file_image=PhotoImage(file="image/file_transfer.png")
 global file_trans
 file_trans=Button(root,image=file_image,bg="#f4fdfe",bd=0,command=file_transfer)
 file_trans.place(x=300,y=100)
 global label2
 label2=Label(root,text="Screen Share",font=('Acumin Variable Concept',17,'bold'), bg="#f4fdfe")
-label2.place(x=60,y=200)
+label2.place(x=40,y=200)
 global label3
 label3=Label(root,text="File Transfer",font=('Acumin Variable Concept',17,'bold'), bg="#f4fdfe")
-label3.place(x=300,y=200)
+label3.place(x=280,y=200)
 
 background=PhotoImage(file="image/background.png")
 Label(root,image=background).place(x=-2,y=280)
