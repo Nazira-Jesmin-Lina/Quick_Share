@@ -29,11 +29,13 @@ def Send():
 
     def select_file():
         global filename
+        global basename
         file = filedialog.askopenfile(initialdir=os.getcwd(), title='Select image File',
                                       filetypes=(('file type', '*.txt'), ('all files', '*.*')))
         if file:
             filename = file.name
-            print(filename)
+            basename = os.path.basename(filename)
+            print("Exact file name:", basename)
 
     def sender():
         s = socket.socket()
@@ -44,9 +46,14 @@ def Send():
         print(host)
         print('waiting for any incoming connection.........')
         conn, addr = s.accept()
+        conn.send(basename.encode())
+        print(basename)
         with open(filename, 'rb') as file:
-            file_data = file.read(1024)
-            conn.send(file_data)
+            while True:
+                file_data = file.read(1024)
+                if not file_data:
+                    break
+                conn.send(file_data)
         print("Data has been transmitted successfully...")
 
 
@@ -96,17 +103,19 @@ def Receive():
     main.resizable(False, False)
 
     def receiver():
-        ID=str(SenderID.get())
-        filename1=incomming_file.get()
+        ID = str(SenderID.get())
 
-
-        s=socket.socket()
-        port=8085
-        s.connect((ID,port))
-        file=open(filename1,'wb')
-        file_data=s.recv(1024)
-        file.write(file_data)
-        file.close()
+        s = socket.socket()
+        port = 8085
+        s.connect((ID, port))
+        filename1=s.recv(1024).decode()
+        print(filename1)
+        with open(filename1, 'wb') as file:
+            while True:
+                file_data = s.recv(1024)
+                if not file_data:
+                    break
+                file.write(file_data)
         print("file has been received successfully..")
 
     def back_btn():
@@ -130,9 +139,6 @@ def Receive():
     SenderID.place(x=20, y=370)
     SenderID.focus()
 
-    Label(main, text="Filename For Incomming File", font=('arial', 10, 'bold'), bg='#f4fdfe').place(x=20, y=420)
-    incomming_file = Entry(main, width=25, fg="black", border=2, bg='white', font=('arial', 15))
-    incomming_file.place(x=20, y=450)
 
     Button(main, text="Back", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff", command=back_btn).place(x=100, y=100)
 
