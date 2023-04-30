@@ -28,28 +28,36 @@ def screen_share():
         window.withdraw()
         root.deiconify()
 
+
+    def connect_btn():
+        print("connect button pressed")
+
+
+    def share_scrn_btn():
+        print("share your screen button pressed")
+
     # icon
     image_icon1 = PhotoImage(file="image/send_fin.png")
     window.iconphoto(False, image_icon1)
 
     Sbackground = PhotoImage(file="image/bg_send_450x560.png")
-    Label(window, image=Sbackground).place(x=-2, y=0)
+    Label(window, image=Sbackground).place(x=-2, y=-2)
 
     Mbackground = PhotoImage(file="image/sss_ui.png")
-    Label(window, image=Mbackground, bg='#87CEEB').place(x=160, y=40)
+    Label(window, image=Mbackground).place(x=130, y=20)
 
     host = socket.gethostname()
     ip_address = socket.gethostbyname(host)
-    Label(window, text=f'IP: {ip_address}', bg='#87CEEB', fg='#000').place(x=180, y=150)
+    Label(window, text=f'IP: {ip_address}', bg='#87CEEB', fg='#000').place(x=190, y=190)
 
-    Button(window, text="connect", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000").place(x=110, y=250)
+    Button(window, text="connect", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",command=connect_btn).place(x=110, y=250)
 
 
     SenderID = Entry(window, width=22,fg="black", border=4, bg='white', font=('arial', 15))
     SenderID.place(x=110, y=320)
     SenderID.focus()
     SenderID.insert(0,"IP Address")
-    Button(window, text="Share your Screen", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000").place(x=110, y=380)
+    Button(window, text="Share your Screen", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",command=share_scrn_btn).place(x=110, y=380)
 
     Button(window, text="Back", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
            command=back_btn).place(x=110, y=450)
@@ -123,7 +131,7 @@ def file_transfer():
                 filename = file.name
                 basename = os.path.basename(filename)
                 print("Exact file name:", basename)
-                Label(window, text=f' {basename}',font=('Acumin Variable Concept', 13, ), bg='#7FFFD4', fg="#000" ).place(x=114, y=255)
+                Label(window, text=f' {basename}',font=('Acumin Variable Concept', 13, ), bg='#7FFFD4', fg="#000" ).place(x=114, y=305)
 
         def sender():
             s = socket.socket()
@@ -145,7 +153,7 @@ def file_transfer():
             print("Data has been transmitted successfully...")
             send_btn.destroy()
             Label(window, text=f'Data has been transmitted successfully...', font=('Acumin Variable Concept', 13,), bg='#7FFFD4', fg="#000").place(
-                x=110, y=300)
+                x=90, y=350)
 
 
         def back_btn():
@@ -157,29 +165,29 @@ def file_transfer():
         window.iconphoto(False, image_icon1)
 
         Sbackground = PhotoImage(file="image/bg_send_450x560.png")
-        Label(window, image=Sbackground).place(x=-2, y=0)
+        Label(window, image=Sbackground).place(x=-2, y=-2)
 
-        Mbackground = PhotoImage(file="image/id_150x150.png")
-        Label(window, image=Mbackground, bg='#f4fdfe').place(x=150, y=15)
+        Mbackground = PhotoImage(file="image/file_UI.png")
+        Label(window, image=Mbackground, bg='#f4fdfe').place(x=130, y=20)
 
         host = socket.gethostname()
         ip_address = socket.gethostbyname(host)
-        Label(window, text=f'IP: {ip_address}', bg='#7FFFD4', fg="#000",).place(x=180, y=150)
+        Label(window, text=f'IP: {ip_address}', bg='#7FFFD4', fg="#000",).place(x=190, y=200)
 
         Button(window, text="+Select File", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
-               command=select_file).place(x=110, y=200)
+               command=select_file).place(x=110, y=250)
 
         global send_btn
         send_btn=Button(window, text="Send", width=20, height=1, font='arial 14 bold',bg='#7FFFD4', fg="#000",
                command=sender)
-        send_btn.place(x=110, y=300)
+        send_btn.place(x=110, y=350)
         sel_file = Entry(window, width=22, fg="black", border=4, bg='#7FFFD4', font=('arial', 15))
-        sel_file.place(x=110, y=250)
+        sel_file.place(x=110, y=300)
         sel_file.focus()
         sel_file.insert(0,"....")
 
         Button(window, text="Back", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
-               command=back_btn).place(x=110, y=350)
+               command=back_btn).place(x=110, y=400)
 
         def on_closing():
             print("User clicked close button")
@@ -214,7 +222,10 @@ def file_transfer():
                         break
                     file.write(file_data)
             print("file has been received successfully..")
-
+            rr.destroy()
+            Label(main, text=f'File has been received successfully.....', font=('Acumin Variable Concept', 13,),
+                  bg='#7FFFD4', fg="#000").place(
+                x=90, y=360)
 
         def back_btn():
             main.withdraw()
@@ -224,20 +235,24 @@ def file_transfer():
         image_icon1 = PhotoImage(file="image/rcv_fin.png")
         main.iconphoto(False, image_icon1)
         Hbackground = PhotoImage(file="image/bg_send_450x560.png")
-        Label(main, image=Hbackground).place(x=-2, y=0)
+        Label(main, image=Hbackground).place(x=-2, y=-2)
 
-        Label(main, text="Input Sender IP", font=('arial', 10, 'bold'), bg='#f4fdfe').place(x=20, y=340)
-        SenderID = Entry(main, width=25, fg="black", border=2, bg='white', font=('arial', 15))
-        SenderID.place(x=20, y=370)
+        Mbackground = PhotoImage(file="image/file_UI.png")
+        Label(main, image=Mbackground, bg='#f4fdfe').place(x=130, y=40)
+
+        # Label(main, text="Input Sender IP", font=('arial', 10, 'bold'), bg='#7FFFD4', fg="#000",).place(x=110, y=250)
+        SenderID = Entry(main, width=22, fg="black", border=2, bg='white', font=('arial', 15))
+        SenderID.place(x=110, y=300)
         SenderID.focus()
+        SenderID.insert(0,"Sender IP..")
 
-        Button(main, text="Back", width=8, height=1, font='arial 14 bold', bg="#000", fg="#fff",
-               command=back_btn).place(x=100, y=100)
+        Button(main, text="Back", width=20, height=1, font='arial 14 bold',  bg='#7FFFD4', fg="#000",
+               command=back_btn).place(x=110, y=420)
 
         imageicon = PhotoImage(file="image/arrow-removebg-preview_30x30.png")
-        rr = Button(main, text="Receive", compound=LEFT, image=imageicon, width=130, bg="#39c790", font='arial 14 bold',
+        rr = Button(main, text="Receive", compound=LEFT, image=imageicon, width=240, bg='#7FFFD4', fg="#000", font='arial 14 bold',
                     command=receiver)
-        rr.place(x=20, y=500)
+        rr.place(x=110, y=350)
 
         def on_closing():
             print("User clicked close button")
