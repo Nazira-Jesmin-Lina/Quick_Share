@@ -20,6 +20,9 @@ def screen_share():
     window.configure(bg='#f4fdfe')
     window.resizable(False, False)
 
+
+    def video_btn():
+        print("share your video")
     def back_btn():
         window.withdraw()
         root.deiconify()
@@ -27,8 +30,14 @@ def screen_share():
     def connect_btn():
         print("connect button pressed")
 
-    def share_scrn_btn():
+    def share_audio_btn():
         print("share your screen button pressed")
+
+    def cancel_audio_btn():
+        print("cancel audio button pressed")
+
+    def cancel_video_btn():
+        print("cancel video button pressed")
 
     # icon
     image_icon1 = PhotoImage(file="image/send_fin.png")
@@ -51,11 +60,16 @@ def screen_share():
     SenderID.place(x=110, y=320)
     SenderID.focus()
     SenderID.insert(0, "IP Address")
-    Button(window, text="Share your Screen", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
-           command=share_scrn_btn).place(x=110, y=380)
+    Button(window, text="Share Audio", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
+           command=share_audio_btn).place(x=110, y=370)
+    cancel_image = PhotoImage(file="image/cancel_20x20.png")
+    Button(window, image=cancel_image, width=20, height=20, bg='#7FFFD4', fg="#000",command=cancel_audio_btn).place(x=380, y=375)
 
+    Button(window, text="Share Video", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
+           command=video_btn).place(x=110, y=430)
+    Button(window, image=cancel_image, width=20, height=20, bg='#7FFFD4', fg="#000",command=cancel_video_btn).place(x=380, y=435)
     Button(window, text="Back", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
-           command=back_btn).place(x=110, y=450)
+           command=back_btn).place(x=110, y=490)
 
     def on_closing():
         print("User clicked close button")
