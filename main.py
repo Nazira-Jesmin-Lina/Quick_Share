@@ -141,7 +141,6 @@ def file_transfer():
             conn.send(basename.encode())
             print(basename)
             ack = conn.recv(1024).decode()
-            print(ack)
             if ack == 'OK':
                 with open(filename, 'rb') as file:
                     while True:
@@ -213,6 +212,7 @@ def file_transfer():
             s.connect((ID, port))
             filename1 = s.recv(1024).decode()
             print(filename1)
+            s.send("OK".encode())
             rcv = "RECEIVE\\" + filename1
             with open(rcv, 'wb') as file:
                 while True:
