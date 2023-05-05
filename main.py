@@ -1,4 +1,5 @@
 from tkinter import *
+from vidstream import *
 import socket
 import threading
 from tkinter import filedialog
@@ -10,6 +11,7 @@ root.title("Quick Share!")
 root.geometry("450x560+500+200")
 root.configure(bg="#f4fdfe")
 root.resizable(False, False)
+local_ip_address = socket.gethostbyname(socket.gethostname())
 
 
 def screen_share():
@@ -19,19 +21,35 @@ def screen_share():
     window.geometry('450x560+500+200')
     window.configure(bg='#f4fdfe')
     window.resizable(False, False)
+    local_ip_address='192.168.31.211'
+
+    server = StreamingServer(local_ip_address, 7777)
+    receiver = AudioReceiver(local_ip_address, 6666)
 
 
     def video_btn():
         print("share your video")
+        camera_client = CameraClient(SenderID.get(), 9999)
+        t3 = threading.Thread(target=camera_client.start_stream)
+        t3.start()
+
     def back_btn():
         window.withdraw()
         root.deiconify()
 
     def connect_btn():
         print("connect button pressed")
+        t1 = threading.Thread(target=server.start_server)
+        t2 = threading.Thread(target=receiver.start_server())
+        t1.start()
+        t2.start()
 
     def share_audio_btn():
-        print("share your screen button pressed")
+        print("share your audio button pressed")
+        audio_sender = AudioSender(SenderID.get(), 8888)
+        t5 = threading.Thread(target=audio_sender.start_stream)
+        t5.start()
+
 
     def cancel_audio_btn():
         print("cancel audio button pressed")
