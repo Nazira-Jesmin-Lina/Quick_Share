@@ -11,6 +11,7 @@ root.title("Quick Share!")
 root.geometry("450x560+500+200")
 root.configure(bg="#f4fdfe")
 root.resizable(False, False)
+local_ip_address = socket.gethostbyname(socket.gethostname())
 
 
 def screen_share():
@@ -22,13 +23,13 @@ def screen_share():
     window.resizable(False, False)
     host = socket.gethostname()
     local_ip_address = socket.gethostbyname(host)
-    server = StreamingServer(local_ip_address, 7777)
-    receiver = AudioReceiver(local_ip_address, 6666)
+    server = StreamingServer(local_ip_address, 9999)
+    receiver = AudioReceiver(local_ip_address, 8888)
 
 
     def video_btn():
         print("share your video")
-        camera_client = CameraClient(SenderID.get(), 9999)
+        camera_client = CameraClient(SenderID.get(), 7777)
         t3 = threading.Thread(target=camera_client.start_stream)
         t3.start()
 
@@ -45,7 +46,7 @@ def screen_share():
 
     def share_audio_btn():
         print("share your audio button pressed")
-        audio_sender = AudioSender(SenderID.get(), 8888)
+        audio_sender = AudioSender(SenderID.get(), 6666)
         t5 = threading.Thread(target=audio_sender.start_stream)
         t5.start()
 
