@@ -61,13 +61,17 @@ def screen_share():
 
     def cancel_audio_btn():
         print("cancel audio button pressed")
-        audio.sender.stop_stream()
+        audio_sender.stop_stream()
+        window.protocol("WM_DELETE_WINDOW", on_closing)
+        # server.stop_server()
+        # receiver.stop_server()
 
 
 
     def cancel_video_btn():
         print("cancel video button pressed")
         camera_client.stop_stream()
+        window.protocol("WM_DELETE_WINDOW", on_closing)
 
 
 
