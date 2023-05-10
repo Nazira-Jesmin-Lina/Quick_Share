@@ -17,7 +17,7 @@ local_ip_address = socket.gethostbyname(socket.gethostname())
 def screen_share():
     root.withdraw()
     window = Toplevel(root)
-    window.title("Send")
+    window.title("Other Share")
     window.geometry('450x560+500+200')
     window.configure(bg='#f4fdfe')
     window.resizable(False, False)
@@ -64,7 +64,7 @@ def screen_share():
 
 
     # icon
-    image_icon1 = PhotoImage(file="image/send_fin.png")
+    image_icon1 = PhotoImage(file="image/scrn_share.png")
     window.iconphoto(False, image_icon1)
 
     Sbackground = PhotoImage(file="image/bg_send_450x560.png")
@@ -333,7 +333,7 @@ def file_transfer():
 
 
 # icon
-image_icon = PhotoImage(file="image/icon.PNG")
+image_icon = PhotoImage(file="image/Neon Blue and Black Gamer Badge Logo (1).png")
 root.iconphoto(False, image_icon)
 global label1
 label1 = Label(root, text="Welcome!!", font=('Acumin Variable Concept', 20, 'bold'), bg="#f4fdfe")
