@@ -45,7 +45,10 @@ def screen_share():
         t2 = threading.Thread(target=receiver.start_server)
         t1.start()
         t2.start()
-
+        cnt_btn.destroy()
+        Label(window, text=f'       Connected     ', font=('Acumin Variable Concept', 20, 'bold'),
+              bg='#7FFFD4', fg="#000").place(
+            x=110, y=310)
     def share_audio_btn():
         print("share your audio button pressed")
         global audio_sender
@@ -57,13 +60,13 @@ def screen_share():
     def cancel_audio_btn():
         print("cancel audio button pressed")
         audio.sender.stop_stream()
-        window.protocol("WM_DELETE_WINDOW", on_closing)
+
 
 
     def cancel_video_btn():
         print("cancel video button pressed")
         camera_client.stop_stream()
-        window.protocol("WM_DELETE_WINDOW", on_closing)
+
 
 
     # icon
@@ -80,11 +83,13 @@ def screen_share():
     ip_address = socket.gethostbyname(host)
     Label(window, text=f'IP: {ip_address}', bg='#87CEEB', fg='#000').place(x=190, y=190)
 
-    Button(window, text="connect", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
-           command=connect_btn).place(x=110, y=250)
+    global cnt_btn
+    cnt_btn = Button(window, text="connect", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
+                     command=connect_btn)
+    cnt_btn.place(x=110, y=310)
 
     SenderID = Entry(window, width=22, fg="black", border=4, bg='white', font=('arial', 15))
-    SenderID.place(x=110, y=320)
+    SenderID.place(x=110, y=250)
     SenderID.focus()
     SenderID.insert(0, "IP Address")
     Button(window, text="Share Audio", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
