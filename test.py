@@ -11,8 +11,10 @@ root.title("Quick Share!")
 root.geometry("450x560+500+200")
 root.configure(bg="#f4fdfe")
 root.resizable(False, False)
-local_ip_address = socket.gethostbyname(socket.gethostname())
-
+host = socket.gethostname()
+local_ip_address = socket.gethostbyname(host)
+server = StreamingServer(local_ip_address, 9999)
+receiver = AudioReceiver(local_ip_address, 8888)
 
 def screen_share():
     root.withdraw()
@@ -21,10 +23,6 @@ def screen_share():
     window.geometry('450x560+500+200')
     window.configure(bg='#f4fdfe')
     window.resizable(False, False)
-    host = socket.gethostname()
-    local_ip_address = socket.gethostbyname(host)
-    server = StreamingServer(local_ip_address, 9999)
-    receiver = AudioReceiver(local_ip_address, 8888)
 
 
     def video_btn():
@@ -34,9 +32,12 @@ def screen_share():
         t3 = threading.Thread(target=camera_client.start_stream)
         t3.start()
 
+
     def back_btn():
         window.withdraw()
         root.deiconify()
+        server.stop_server()
+        receiver.stop_server()
 
     def connect_btn():
         print("connect button pressed")
@@ -56,11 +57,13 @@ def screen_share():
     def cancel_audio_btn():
         print("cancel audio button pressed")
         audio.sender.stop_stream()
+        window.protocol("WM_DELETE_WINDOW", on_closing)
 
 
     def cancel_video_btn():
         print("cancel video button pressed")
         camera_client.stop_stream()
+        window.protocol("WM_DELETE_WINDOW", on_closing)
 
 
     # icon
@@ -87,13 +90,11 @@ def screen_share():
     Button(window, text="Share Audio", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
            command=share_audio_btn).place(x=110, y=370)
     cancel_image = PhotoImage(file="image/cancel_audio.png")
-    Button(window, image=cancel_image, width=30, height=30, bg='#7FFFD4', fg="#000", command=cancel_audio_btn).place(
-        x=380, y=370)
+    Button(window, image=cancel_image, width=30, height=30, bg='#7FFFD4', fg="#000",command=cancel_audio_btn).place(x=380, y=370)
     cancel_video_img = PhotoImage(file="image/cancel_video.png")
     Button(window, text="Share Video", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
            command=video_btn).place(x=110, y=430)
-    Button(window, image=cancel_video_img, width=30, height=30, bg='#7FFFD4', fg="#000",
-           command=cancel_video_btn).place(x=380, y=430)
+    Button(window, image=cancel_video_img, width=30, height=30, bg='#7FFFD4', fg="#000",command=cancel_video_btn).place(x=380, y=430)
     Button(window, text="Back", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
            command=back_btn).place(x=110, y=490)
 
@@ -353,7 +354,7 @@ global file_trans
 file_trans = Button(root, image=file_image, bg="#f4fdfe", bd=0, command=file_transfer)
 file_trans.place(x=300, y=100)
 global label2
-label2 = Label(root, text="Screen Share", font=('Acumin Variable Concept', 17, 'bold'), bg="#f4fdfe")
+label2 = Label(root, text="Other Share", font=('Acumin Variable Concept', 17, 'bold'), bg="#f4fdfe")
 label2.place(x=40, y=200)
 global label3
 label3 = Label(root, text="File Transfer", font=('Acumin Variable Concept', 17, 'bold'), bg="#f4fdfe")

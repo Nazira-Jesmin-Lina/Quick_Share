@@ -11,7 +11,10 @@ root.title("Quick Share!")
 root.geometry("450x560+500+200")
 root.configure(bg="#f4fdfe")
 root.resizable(False, False)
-
+host = socket.gethostname()
+local_ip_address = socket.gethostbyname(host)
+server = StreamingServer(local_ip_address, 7777)
+receiver = AudioReceiver(local_ip_address, 6666)
 
 def screen_share():
     root.withdraw()
@@ -20,10 +23,6 @@ def screen_share():
     window.geometry('450x560+500+200')
     window.configure(bg='#f4fdfe')
     window.resizable(False, False)
-    host = socket.gethostname()
-    local_ip_address = socket.gethostbyname(host)
-    server = StreamingServer(local_ip_address, 7777)
-    receiver = AudioReceiver(local_ip_address, 6666)
 
 
     def video_btn():
@@ -37,6 +36,8 @@ def screen_share():
     def back_btn():
         window.withdraw()
         root.deiconify()
+        server.stop_server()
+        receiver.stop_server()
 
     def connect_btn():
         print("connect button pressed")
