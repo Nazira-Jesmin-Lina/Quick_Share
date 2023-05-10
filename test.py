@@ -1,3 +1,4 @@
+import hashlib
 from tkinter import *
 from vidstream import *
 import socket
@@ -16,6 +17,7 @@ local_ip_address = socket.gethostbyname(host)
 server = StreamingServer(local_ip_address, 9999)
 receiver = AudioReceiver(local_ip_address, 8888)
 
+
 def screen_share():
     root.withdraw()
     window = Toplevel(root)
@@ -24,14 +26,12 @@ def screen_share():
     window.configure(bg='#f4fdfe')
     window.resizable(False, False)
 
-
     def video_btn():
         print("share your video")
         global camera_client
         camera_client = CameraClient(SenderID.get(), 7777)
         t3 = threading.Thread(target=camera_client.start_stream)
         t3.start()
-
 
     def back_btn():
         window.withdraw()
@@ -49,13 +49,13 @@ def screen_share():
         Label(window, text=f'       Connected     ', font=('Acumin Variable Concept', 20, 'bold'),
               bg='#7FFFD4', fg="#000").place(
             x=110, y=310)
+
     def share_audio_btn():
         print("share your audio button pressed")
         global audio_sender
         audio_sender = AudioSender(SenderID.get(), 6666)
         t5 = threading.Thread(target=audio_sender.start_stream)
         t5.start()
-
 
     def cancel_audio_btn():
         print("cancel audio button pressed")
@@ -64,14 +64,10 @@ def screen_share():
         # server.stop_server()
         # receiver.stop_server()
 
-
-
     def cancel_video_btn():
         print("cancel video button pressed")
         camera_client.stop_stream()
         window.protocol("WM_DELETE_WINDOW", on_closing)
-
-
 
     # icon
     image_icon1 = PhotoImage(file="image/scrn_share.png")
@@ -99,11 +95,13 @@ def screen_share():
     Button(window, text="Share Audio", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
            command=share_audio_btn).place(x=110, y=370)
     cancel_image = PhotoImage(file="image/cancel_audio.png")
-    Button(window, image=cancel_image, width=30, height=30, bg='#7FFFD4', fg="#000",command=cancel_audio_btn).place(x=380, y=370)
+    Button(window, image=cancel_image, width=30, height=30, bg='#7FFFD4', fg="#000", command=cancel_audio_btn).place(
+        x=380, y=370)
     cancel_video_img = PhotoImage(file="image/cancel_video.png")
     Button(window, text="Share Video", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
            command=video_btn).place(x=110, y=430)
-    Button(window, image=cancel_video_img, width=30, height=30, bg='#7FFFD4', fg="#000",command=cancel_video_btn).place(x=380, y=430)
+    Button(window, image=cancel_video_img, width=30, height=30, bg='#7FFFD4', fg="#000",
+           command=cancel_video_btn).place(x=380, y=430)
     Button(window, text="Back", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
            command=back_btn).place(x=110, y=490)
 
@@ -193,17 +191,35 @@ def file_transfer():
             ack = conn.recv(1024).decode()
             if ack == 'OK':
                 with open(filename, 'rb') as file:
-                    while True:
+                    window_size = 4  # set the window size to 4
+                    packets = []
+                    current_packet = 0
+                    total_packets = (os.path.getsize(filename) // 1024) + 1
+                    for i in range(total_packets):
                         file_data = file.read(1024)
-                        if not file_data:
-                            break
-                        conn.send(file_data)
+                        packets.append(file_data)
+                    conn.send(f"{total_packets}".encode())
+                    print(basename)
+                    ackk = conn.recv(1024).decode()
+                    if ackk == "sz":
+                        while current_packet < total_packets:
+                            for i in range(total_packets):
+                                conn.send(packets[i])
+                                try:
+                                    ack = conn.recv(1024).decode()
+                                    if ack == "ACK":
+                                        current_packet += 1
+                                       # print(f"Packet {current_packet} acknowledged.")
+                                except:
+                                    continue
+                    else:
+                        print('sz not rcvd')
+                print(f" Total {current_packet} Packet acknowledged.")
                 print("Data has been transmitted successfully...")
                 send_btn.destroy()
                 Label(window, text=f'Data has been transmitted successfully...', font=('Acumin Variable Concept', 13,),
                       bg='#7FFFD4', fg="#000").place(
                     x=90, y=350)
-
         def back_btn():
             window.withdraw()
             root.deiconify()
@@ -264,17 +280,30 @@ def file_transfer():
             print(filename1)
             s.send("OK".encode())
             rcv = "RECEIVE\\" + filename1
+            sz = s.recv(1024).decode()
+            print(sz)
+            sz = int(sz)
+            s.send("sz".encode())
             with open(rcv, 'wb') as file:
+                current_packet = 0
                 while True:
-                    file_data = s.recv(1024)
-                    if not file_data:
+                    if current_packet == sz:
                         break
-                    file.write(file_data)
+                    try:
+                        file_data = s.recv(1024)
+                        if not file_data:
+                            break
+                        file.write(file_data)
+                        s.send("ACK".encode())  # sending ACK for each packet received
+                        current_packet += 1
+                        # print(f"Packet {current_packet} received.")
+                    except:
+                        continue
+            print(f"Total {current_packet} Packet  received.")
             print("file has been received successfully..")
             rr.destroy()
             Label(main, text=f'File has been received successfully.....', font=('Acumin Variable Concept', 13,),
-                  bg='#7FFFD4', fg="#000").place(
-                x=90, y=360)
+                  bg='#7FFFD4', fg="#000").place(x=90, y=360)
 
         def back_btn():
             main.withdraw()
