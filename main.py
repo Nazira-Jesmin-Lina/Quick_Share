@@ -188,6 +188,10 @@ def file_transfer():
             conn, addr = s.accept()
             conn.send(basename.encode())
             print(basename)
+            seq_num = 0
+            cwnd = 1
+            ssthresh = 1024
+            rtt = 1
             ack = conn.recv(1024).decode()
             if ack == 'OK':
                 with open(filename, 'rb') as file:
@@ -209,7 +213,15 @@ def file_transfer():
                                     ack = conn.recv(1024).decode()
                                     if ack == "ACK":
                                         current_packet += 1
-                                       # print(f"Packet {current_packet} acknowledged.")
+                                        if seq_num == len(file_data):
+                                            # All packets have been acknowledged
+                                            break
+                                        if cwnd < ssthresh:
+                                            cwnd *= 2
+                                        else:
+                                            cwnd += 1
+                                    print(cwnd)
+                                    # print(f"Packet {current_packet} acknowledged.")
                                 except:
                                     continue
                     else:
