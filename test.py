@@ -222,6 +222,8 @@ def file_transfer():
                                             cwnd += 1
                                     # print(f"Packet {current_packet} acknowledged.")
                                 except:
+                                    ssthresh = max(cwnd / 2, 1)
+                                    cwnd = 1
                                     continue
                     else:
                         print('sz not rcvd')
