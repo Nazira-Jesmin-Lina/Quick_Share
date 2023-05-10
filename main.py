@@ -28,9 +28,11 @@ def screen_share():
 
     def video_btn():
         print("share your video")
+        global camera_client
         camera_client = CameraClient(SenderID.get(), 9999)
         t3 = threading.Thread(target=camera_client.start_stream)
         t3.start()
+
 
     def back_btn():
         window.withdraw()
@@ -39,12 +41,13 @@ def screen_share():
     def connect_btn():
         print("connect button pressed")
         t1 = threading.Thread(target=server.start_server)
-        t2 = threading.Thread(target=receiver.start_server())
+        t2 = threading.Thread(target=receiver.start_server)
         t1.start()
         t2.start()
 
     def share_audio_btn():
         print("share your audio button pressed")
+        global audio_sender
         audio_sender = AudioSender(SenderID.get(), 8888)
         t5 = threading.Thread(target=audio_sender.start_stream)
         t5.start()
@@ -52,9 +55,15 @@ def screen_share():
 
     def cancel_audio_btn():
         print("cancel audio button pressed")
+        audio.sender.stop_stream()
+        window.protocol("WM_DELETE_WINDOW", on_closing)
+
 
     def cancel_video_btn():
         print("cancel video button pressed")
+        camera_client.stop_stream()
+        window.protocol("WM_DELETE_WINDOW", on_closing)
+
 
     # icon
     image_icon1 = PhotoImage(file="image/send_fin.png")
@@ -79,12 +88,12 @@ def screen_share():
     SenderID.insert(0, "IP Address")
     Button(window, text="Share Audio", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
            command=share_audio_btn).place(x=110, y=370)
-    cancel_image = PhotoImage(file="image/cancel_20x20.png")
-    Button(window, image=cancel_image, width=20, height=20, bg='#7FFFD4', fg="#000",command=cancel_audio_btn).place(x=380, y=375)
-
+    cancel_image = PhotoImage(file="image/cancel_audio.png")
+    Button(window, image=cancel_image, width=30, height=30, bg='#7FFFD4', fg="#000",command=cancel_audio_btn).place(x=380, y=370)
+    cancel_video_img = PhotoImage(file="image/cancel_video.png")
     Button(window, text="Share Video", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
            command=video_btn).place(x=110, y=430)
-    Button(window, image=cancel_image, width=20, height=20, bg='#7FFFD4', fg="#000",command=cancel_video_btn).place(x=380, y=435)
+    Button(window, image=cancel_video_img, width=30, height=30, bg='#7FFFD4', fg="#000",command=cancel_video_btn).place(x=380, y=430)
     Button(window, text="Back", width=20, height=1, font='arial 14 bold', bg='#7FFFD4', fg="#000",
            command=back_btn).place(x=110, y=490)
 
